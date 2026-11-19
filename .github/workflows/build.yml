@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+    branches: ["main", "master", "claude/**"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build app bundle
+        run: ./Scripts/bundle.sh
+      - name: Zip app
+        run: ditto -c -k --keepParent dist/Switchboard.app Switchboard.app.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Switchboard
+          path: Switchboard.app.zip
